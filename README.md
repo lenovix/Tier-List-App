@@ -13,9 +13,8 @@ version: 0.0.1
 
 ## Bugs ('+': Fix bug, '-': Not Fix bug):
 
-(-) when first image/character already put in tier list, and then user upload another image/character, the first image not load in tier list but go back to uploaded list image.
-(-) when image drag in upper another image, the image will disappear.
-(-)
+- (-) when first image/character already put in tier list, and then user upload another image/character, the first image not load in tier list but go back to uploaded list image.
+- (-) when image drag in upper another image, the image will disappear.
 
 ## Disclaimer
 
