@@ -31,18 +31,44 @@ class Home extends Controller
     {
         return view('create_table');
     }
-    public function submitTableConfig()
+    public function processTableName()
     {
+        $session = session();
         $tableName = $this->request->getPost('tableName');
-        $tableIcon = $this->request->getPost('tableIcon');
-        $ranks = $this->request->getPost('ranks');
-        if (empty($ranks)) {
-            return redirect()->back()->with('error', 'At least one rank must be selected.');
+        $session->set('tableName', $tableName);
+
+        return redirect()->to('/configureTable');
+    }
+    public function configureTable()
+    {
+        $session = session();
+        $data['tableName'] = $session->get('tableName');
+
+        return view('configure_table', $data);
+    }
+    public function uploadImage()
+    {
+        $session = session();
+        $img = $this->request->getFile('image');
+
+        if ($img->isValid() && !$img->hasMoved()) {
+            $newName = $img->getRandomName();
+            // $img->move(WRITEPATH . 'uploads', $newName);
+            $img->move(FCPATH . 'uploads', $newName);
+
+            // debug
+            error_log('File uploaded: ' . $img->getName());
+
+            $uploadedImages = $session->get('uploadedImages') ?? [];
+
+            $uploadedImages[] = $newName;
+
+            $session->set('uploadedImages', $uploadedImages);
+        } else {
+            // debug
+            error_log('File upload failed: ' . $img->getErrorString());
         }
-        return view('table_view', [
-            'tableName' => $tableName,
-            'tableIcon' => $tableIcon,
-            'ranks' => $ranks
-        ]);
+
+        return redirect()->to('/configureTable');
     }
 }

@@ -33,7 +33,9 @@ $routes->get('/', 'Home::index');
 $routes->get('/about', 'Home::about');  // Tambahkan jika ada halaman about
 $routes->get('/contact', 'Home::contact');  // Tambahkan jika ada halaman contact
 $routes->get('/createTable', 'Home::createTable');
-$routes->post('/submitTableConfig', 'Home::submitTableConfig');
+$routes->post('/Home/processTableName', 'Home::processTableName');
+$routes->get('/configureTable', 'Home::configureTable');
+$routes->post('/Home/uploadImage', 'Home::uploadImage');
 
 /*
  * --------------------------------------------------------------------
