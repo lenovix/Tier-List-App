@@ -71,4 +71,39 @@ class Home extends Controller
 
         return redirect()->to('/configureTable');
     }
+
+    public function updateTableName()
+    {
+        if ($this->request->isAJAX()) {
+            $data = $this->request->getJSON();
+            $tableName = $data->tableName;
+
+            // Logika untuk memperbarui nama tabel
+            // Simpan nama tabel baru ke sesi
+            $session = session();
+            $session->set('tableName', $tableName);
+
+            return $this->response->setJSON(['success' => true]);
+        }
+
+        return $this->response->setJSON(['success' => false]);
+    }
+
+    public function deleteTable()
+    {
+        if ($this->request->isAJAX()) {
+            $data = $this->request->getJSON();
+            $tableName = $data->tableName;
+
+            // Logika untuk menghapus tabel
+            // Dalam contoh ini, kita hanya menghapus sesi
+            $session = session();
+            $session->remove('tableName');
+            $session->remove('uploadedImages');
+
+            return $this->response->setJSON(['success' => true]);
+        }
+
+        return $this->response->setJSON(['success' => false]);
+    }
 }
