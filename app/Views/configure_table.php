@@ -8,7 +8,7 @@
     <tbody>
         <tr>
             <td style="vertical-align: middle; width:10%; text-align: center; border: solid 1px black;">S</td>
-            <td style="vertical-align: middle; width:70%; border: solid 1px black;">Tier List Rank S</td>
+            <td class="dropzone" style="vertical-align: middle; width:70%; border: solid 1px black;">Tier List Rank S</td>
             <td style="vertical-align: middle;  width:10%;border: solid 1px black;"><button class="btn btn-secondary">Configure</button></td>
             <td style="width:10%; border: solid 1px black;">
                 <button class="btn btn-info" style="width: 100%; margin-bottom: 2px;">Up</button><br>
@@ -18,7 +18,7 @@
         <tr>
             <td style=" vertical-align: middle; text-align: center;border: solid 1px black;">A
             </td>
-            <td style="vertical-align: middle;border: solid 1px black;">Tier List Rank A</td>
+            <td class="dropzone" style="vertical-align: middle;border: solid 1px black;">Tier List Rank A</td>
             <td style="vertical-align: middle;border: solid 1px black;"><button class="btn btn-secondary">Configure</button></td>
             <td style="border: solid 1px black;">
                 <button class="btn btn-info" style="width: 100%; margin-bottom: 2px;">Up</button><br>
@@ -27,7 +27,7 @@
         </tr>
         <tr>
             <td style="vertical-align: middle; text-align: center;border: solid 1px black;">B</td>
-            <td style="vertical-align: middle;border: solid 1px black;">Tier List Rank C</td>
+            <td class="dropzone" style="vertical-align: middle;border: solid 1px black;">Tier List Rank C</td>
             <td style="vertical-align: middle;border: solid 1px black;"><button class="btn btn-secondary">Configure</button></td>
             <td style="border: solid 1px black;">
                 <button class="btn btn-info" style="width: 100%; margin-bottom: 2px;">Up</button><br>
@@ -36,7 +36,7 @@
         </tr>
         <tr>
             <td style="vertical-align: middle; text-align: center;border: solid 1px black;">C</td>
-            <td style="vertical-align: middle;border: solid 1px black;">Tier List Rank C</td>
+            <td class="dropzone" style="vertical-align: middle;border: solid 1px black;">Tier List Rank C</td>
             <td style="vertical-align: middle;border: solid 1px black;"><button class="btn btn-secondary">Configure</button></td>
             <td style="border: solid 1px black;">
                 <button class="btn btn-info" style="width: 100%; margin-bottom: 2px;">Up</button><br>
@@ -45,7 +45,7 @@
         </tr>
         <tr>
             <td style="vertical-align: middle; text-align: center;border: solid 1px black;">D</td>
-            <td style="vertical-align: middle;border: solid 1px black;">Tier List Rank D</td>
+            <td class="dropzone" style="vertical-align: middle;border: solid 1px black;">Tier List Rank D</td>
             <td style="vertical-align: middle;border: solid 1px black;"><button class="btn btn-secondary">Configure</button></td>
             <td style="border: solid 1px black;">
                 <button class="btn btn-info" style="width: 100%; margin-bottom: 2px;">Up</button><br>
@@ -67,7 +67,7 @@
     <!-- Tempat untuk menampilkan gambar yang diupload -->
     <?php if (session()->has('uploadedImages')) : ?>
         <?php foreach (session('uploadedImages') as $image) : ?>
-            <img src="<?= base_url('uploads/' . $image) ?>" alt="Uploaded Image" class="img-thumbnail" width="80" height="80">
+            <img src="<?= base_url('uploads/' . $image) ?>" alt="Uploaded Image" class="img-thumbnail" width="80" height="80" draggable="true" ondragstart="drag(event)" id="<?= esc($image) ?>">
         <?php endforeach; ?>
     <?php endif; ?>
 </div>
@@ -75,6 +75,32 @@
 <button class="btn btn-success" onclick="downloadTable()">Download Table</button>
 
 <script>
+    function drag(event) {
+        event.dataTransfer.setData("text", event.target.id);
+    }
+
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        var data = event.dataTransfer.getData("text");
+        var img = document.getElementById(data);
+        event.target.appendChild(img);
+
+        // Remove image from the uploaded images div
+        var uploadedImagesDiv = document.getElementById('uploadedImages');
+        if (uploadedImagesDiv.contains(img)) {
+            uploadedImagesDiv.removeChild(img);
+        }
+    }
+
+    document.querySelectorAll('.dropzone').forEach(zone => {
+        zone.ondragover = allowDrop;
+        zone.ondrop = drop;
+    });
+
     function downloadTable() {
         if (confirm('Download table as JPEG/PNG?')) {
             // Implementasi download table sebagai gambar di sini
